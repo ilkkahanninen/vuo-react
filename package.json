@@ -1,0 +1,23 @@
+{
+  "name": "vuo-react",
+  "version": "0.0.1",
+  "description": "React integration with Vuo",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ilkkahanninen/vuo-react.git"
+  },
+  "author": "Ilkka Hänninen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ilkkahanninen/vuo-react/issues"
+  },
+  "homepage": "https://github.com/ilkkahanninen/vuo-react",
+  "peerDependencies": {
+    "vuo": "0.x",
+    "react": "0.x"
+  }
+}
