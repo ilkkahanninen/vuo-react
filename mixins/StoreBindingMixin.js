@@ -4,10 +4,19 @@
 
 module.exports = {
   
-  componentDidMount: function () {
+  componentWillMount: function () {
+    var state = {};
     if (typeof this.bindStores === 'function') {
       this._storeBindListeners = [];
       this.bindStores();
+      
+      this._storeBindListeners.forEach(function (listener) {
+        listener.properties.forEach(function (prop) {
+          state[prop] = listener.store[prop]();
+        });
+      });
+      this.setState(state);
+      
     } else {
       console.warn("vuo-react store binding mixin is used without declaring bindStores");
     }
@@ -37,7 +46,11 @@ module.exports = {
     }
     
     store.onChange(onChange);
-    this._storeBindListeners.push({store: store, callback: onChange});
+    this._storeBindListeners.push({
+      store: store,
+      properties: properties,
+      callback: onChange
+    });
   }
   
 };

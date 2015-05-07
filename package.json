@@ -19,5 +19,8 @@
   "peerDependencies": {
     "vuo": "0.x",
     "react": "0.x"
+  },
+  "devDependencies": {
+    "jsdom": "^3.1.2"
   }
 }

@@ -10,10 +10,8 @@ module.exports = {
     var obj = {};
     if (this.props.action) {
       if (this.props.dataKey) {
-        obj[this.props.dataKey] = event.target.value;
+        obj[this.props.dataKey] = value;
         value = obj;
-      } else {
-        value = event.target.value;
       }
       this.props.action(value);
     }
