@@ -14,6 +14,7 @@ module.exports = React.createClass({
   },
   
   onSubmit: function (event) {
+    event.preventDefault();
     this.callAction(event.target.value);
   }
 });
