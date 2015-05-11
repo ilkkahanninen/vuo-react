@@ -4,7 +4,8 @@
 
 var
   React = require('react'),
-  ActionBindingMixin = require('../mixins/ActionBindingMixin');
+  ActionBindingMixin = require('../mixins/ActionBindingMixin'),
+  serialize = require('form-serialize');
 
 module.exports = React.createClass({
   mixins: [ActionBindingMixin],
@@ -15,6 +16,8 @@ module.exports = React.createClass({
   
   onSubmit: function (event) {
     event.preventDefault();
-    this.callAction(event.target.value);
+    this.callAction(serialize(event.target, {
+      hash: !this.props.urlEncoding
+    }));
   }
 });

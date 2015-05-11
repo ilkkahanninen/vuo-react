@@ -1,5 +1,5 @@
 /*jslint node: true*/
-/*global describe, it, document, window*/
+/*global describe, it, document, window, afterEach*/
 "use strict";
 
 var
@@ -23,7 +23,9 @@ var
       });
     }    
     
-  });
+  }),
+  
+  listenerID;
 
 global.document = jsdom.jsdom('<!doctype html><html><body></body></html>');
 global.window = document.parentWindow;
@@ -31,11 +33,15 @@ global.window = document.parentWindow;
 
 
 describe("Input", function () {
-  it("calls action on change", function (done) {
+
+  afterEach(function () {
+    try { Dispatcher.unregister(listenerID); } catch(e) {}
+  });
+
+  it("input field calls action when it is changed", function (done) {
     var
       Input = require('../components/input'),
-      component = TestUtils.renderIntoDocument(React.createElement(Input, {action: TestActions.setValue})),
-      listenerID;
+      component = TestUtils.renderIntoDocument(React.createElement(Input, {action: TestActions.setValue}));
     
     function testPayload(payload) {
     }
@@ -43,13 +49,32 @@ describe("Input", function () {
     listenerID = Dispatcher.register(function (payload) {
       assert.equal(payload.type, TestActions.SET_VALUE);
       assert.equal(payload.value, "Test 1");
-      Dispatcher.unregister(listenerID);
       done();
     });
     
     TestUtils.Simulate.change(React.findDOMNode(component), {target: {value: "Test 1"}});
   });
-  
+
+  it("form calls action when it submitted", function (done) {
+    var
+      Form = require('../components/form'),
+      component = TestUtils.renderIntoDocument(
+        React.createElement(Form, {action: TestActions.setValue}, [
+          React.createElement('input', {key: 'a', name: 'name', defaultValue: 'Dolan'}),
+          React.createElement('input', {key: 'b', name: 'password', defaultValue: 'secret123'}),
+          React.createElement('input', {key: 'c', type: 'submit', className: 'submit'})
+        ]));
+    
+    listenerID = Dispatcher.register(function (payload) {
+      assert.equal(payload.type, TestActions.SET_VALUE);
+      assert(payload.value.name, 'Dolan');
+      assert(payload.value.password, 'secret123');
+      done();
+    });
+    
+    TestUtils.Simulate.submit(React.findDOMNode(component));
+  });
+
   it("updates itself when store changes", function () {
     TestActions.setValue("initial");
     
